@@ -1,0 +1,55 @@
+<div class="login-container">
+    <div class="login-background">
+      <div class="stars"></div>
+      <div class="twinkling"></div>
+    </div>
+    
+    <div class="login-content">
+      <div class="login-form-container">
+        <div class="logo">
+          <h1>🚀 TechKids Academy</h1>
+          <p>Aprender programação nunca foi tão divertido!</p>
+        </div>
+        
+        <form class="login-form" (ngSubmit)="onSubmit()">
+          <div class="input-group">
+            <input 
+              type="text" 
+              [(ngModel)]="username" 
+              name="username"
+              placeholder="Nome de usuário"
+              class="login-input"
+              [disabled]="isLoading"
+              required>
+          </div>
+          
+          <div class="input-group">
+            <input 
+              type="password" 
+              [(ngModel)]="password" 
+              name="password"
+              placeholder="Senha"
+              class="login-input"
+              [disabled]="isLoading"
+              required>
+          </div>
+          
+          <div *ngIf="errorMessage" class="error-message">
+            {{errorMessage}}
+          </div>
+          
+          <button 
+            type="submit" 
+            class="login-button"
+            [disabled]="isLoading">
+            <span *ngIf="!isLoading">Entrar na Aventura! 🌟</span>
+            <span *ngIf="isLoading">Carregando... ⏳</span>
+          </button>
+        </form>
+        
+        <div class="demo-info">
+          <p>💡 Dica: Use <strong>admin</strong> como usuário e senha para testar!</p>
+        </div>
+      </div>
+    </div>
+  </div>

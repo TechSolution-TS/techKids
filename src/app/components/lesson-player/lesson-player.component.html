@@ -1,0 +1,82 @@
+<div class="lesson-container" *ngIf="lesson">
+  <!-- Header -->
+  <header class="lesson-header">
+    <button class="back-button" (click)="goBack()">
+      Voltar às Aulas
+    </button>
+    <h1>{{lesson.title}}</h1>
+    <div class="header-actions">
+      <span class="user-name">Olá, {{userName}}! 👋</span>
+      <button class="chat-toggle" (click)="toggleChat()" [class.active]="showChat">
+        💬 Professor IA
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="lesson-main">
+    <!-- Video Player -->
+    <div class="video-section">
+      <div class="video-container">
+        <iframe 
+          *ngIf="videoUrl"
+          [src]="videoUrl"
+          frameborder="0"
+          allowfullscreen
+          allow="autoplay; encrypted-media"
+          class="video-player">
+        </iframe>
+        <div *ngIf="!videoUrl" class="video-placeholder">
+          <div class="placeholder-content">
+            <h3>🎬 Vídeo da Aula</h3>
+            <p>Nenhum vídeo disponível para esta aula</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Lesson Info -->
+      <div class="lesson-info">
+        <h2>{{lesson.title}}</h2>
+        <p class="lesson-description">{{lesson.description}}</p>
+        
+        <div class="lesson-content">
+          <h3>📚 Conteúdo da Aula</h3>
+          
+          <!-- Conteúdo processado -->
+          <div class="content-sections">
+            <div *ngFor="let part of processedContent; let i = index" class="content-part">
+              
+              <!-- Texto normal -->
+              <div *ngIf="part.type === 'text'" class="content-text">
+                {{part.content}}
+              </div>
+              
+              <div *ngIf="part.type === 'code'" class="code-block">
+                <div class="code-header">
+                  <span class="code-label">💻 Código usado na aula</span>
+                  <button class="copy-button" (click)="copyCode(part.content)">
+                    📋 Copiar Código
+                  </button>
+                </div>
+                <pre class="code-content">{{part.formattedContent}}</pre>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat AI Sidebar -->
+    <div class="chat-sidebar" [class.show]="showChat">
+      <app-chat-ai 
+        *ngIf="showChat" 
+        [lessonContent]="lesson.content"
+        [userName]="userName"
+        [isExpanded]="isChatExpanded"
+        (toggleExpanded)="toggleChatExpanded()"
+        (closeChat)="closeChatModal()">
+      </app-chat-ai>
+    </div>
+  </main>
+</div>

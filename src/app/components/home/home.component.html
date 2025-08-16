@@ -1,0 +1,99 @@
+<div class="home-container">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <h1>🚀 TechKids Academy</h1>
+      </div>
+      <div class="user-menu">
+        <span class="welcome">Olá, {{userName}}! 👋</span>
+        <button class="logout-btn" (click)="logout()">
+          <span>Sair</span> 🚪
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Carregando suas aulas incríveis... 🎓</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main *ngIf="!isLoading" class="main-content">
+    <div class="hero-section">
+      <h2>Continue sua jornada de aprendizado! 🌟</h2>
+      <p>Explore nossas matérias e descubra o mundo da programação</p>
+    </div>
+
+    <!-- Subjects Grid -->
+    <div class="subjects-container">
+      <div *ngFor="let matter of matters" class="subject-section">
+        <div class="subject-header">
+          <h3>
+            <span class="subject-icon">{{getSubjectIcon(matter.name)}}</span>
+            {{matter.name}}
+          </h3>
+          <span class="lesson-count">
+            {{lessonsByMatter[matter.uuid]?.length || 0}} aulas
+          </span>
+        </div>
+
+        <!-- Lessons Carousel -->
+        <div class="lessons-carousel">
+          <div class="lessons-grid">
+            <div 
+              *ngFor="let lesson of lessonsByMatter[matter.uuid]" 
+              class="lesson-card"
+              (click)="onLessonClick(lesson)">
+              
+              <div class="lesson-thumbnail">
+                <!-- Imagem real da thumbnail -->
+                <img 
+                  *ngIf="lesson.thumbnail && convertGoogleDriveUrl(lesson.thumbnail)"
+                  [src]="convertGoogleDriveUrl(lesson.thumbnail)"
+                  [alt]="lesson.title"
+                  class="thumbnail-image"
+                  (error)="onImageError($event)"
+                  (load)="onImageLoad($event)">
+                
+                <!-- Fallback quando não há imagem ou falha no carregamento -->
+                <div 
+                  class="thumbnail-fallback"
+                  [style.display]="!lesson.thumbnail || !convertGoogleDriveUrl(lesson.thumbnail) ? 'flex' : 'none'">
+                  <div class="fallback-icon">🎓</div>
+                </div>
+
+                <div class="play-button">
+                  <div class="play-icon">▶️</div>
+                </div>
+                <div class="lesson-duration">
+                  <span>📹 Vídeo</span>
+                </div>
+              </div>
+              
+              <div class="lesson-info">
+                <h4 class="lesson-title">{{lesson.title}}</h4>
+                <p class="lesson-description">
+                  {{truncateText(lesson.description, 120)}}
+                </p>
+                <div class="lesson-tags">
+                  <span class="tag programming">💻 Programação</span>
+                  <span class="tag subject">{{matter.name}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 TechKids Academy - Aprendendo o futuro, hoje! 🚀</p>
+  </footer>
+</div>

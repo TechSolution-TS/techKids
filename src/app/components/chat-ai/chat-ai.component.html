@@ -1,0 +1,85 @@
+<div class="chat-wrapper" [class.expanded]="isExpanded">
+  <div class="chat-backdrop" *ngIf="isExpanded" (click)="closeChatModal()"></div>
+  
+  <div class="chat-container" [class.modal-view]="isExpanded">
+    <div class="chat-header">
+      <div class="header-left">
+        <h3>🤖 Professor IA</h3>
+        <p>Tire suas dúvidas aqui!</p>
+      </div>
+      <div class="header-actions">
+        <button 
+          class="expand-button" 
+          (click)="expandChat()"
+          [title]="isExpanded ? 'Minimizar' : 'Expandir'">
+          <span *ngIf="!isExpanded">⛶</span>
+          <span *ngIf="isExpanded">🗕</span>
+        </button>
+        <button 
+          *ngIf="isExpanded" 
+          class="close-button" 
+          (click)="closeChatModal()"
+          title="Fechar">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <div class="chat-messages">
+      <div 
+        *ngFor="let message of messages" 
+        class="message"
+        [class.user-message]="message.isUser"
+        [class.ai-message]="!message.isUser">
+        
+        <div class="message-avatar">
+          <span *ngIf="message.isUser">👤</span>
+          <span *ngIf="!message.isUser">🤖</span>
+        </div>
+        
+        <div class="message-content">
+          <div class="message-text">{{message.content}}</div>
+          <div class="message-time">
+            {{message.timestamp | date:'HH:mm'}}
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="isLoading" class="message ai-message loading-message">
+        <div class="message-avatar">
+          <span>🤖</span>
+        </div>
+        <div class="message-content">
+          <div class="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <div class="input-container">
+        <textarea
+          [(ngModel)]="currentMessage"
+          (keypress)="onKeyPress($event)"
+          placeholder="Digite sua dúvida aqui... 💭"
+          [rows]="isExpanded ? 3 : 2"
+          [disabled]="isLoading"
+          class="message-input">
+        </textarea>
+        <button 
+          (click)="sendMessage()" 
+          [disabled]="!currentMessage.trim() || isLoading"
+          class="send-button">
+          <span *ngIf="!isLoading">📤</span>
+          <span *ngIf="isLoading">⏳</span>
+        </button>
+      </div>
+      <div class="input-hint">
+        💡 Dica: Pressione Enter para enviar ou Shift+Enter para nova linha
+      </div>
+    </div>
+  </div>
+</div>
